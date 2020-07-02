@@ -19,6 +19,7 @@ def start():
                     # umkfess is the keyword
                     # if you want to turn off the case sensitive like: umkfess, Umkfess, UMKfess
                     # just use lower(message) and check it, but please remove the replace function line
+                    
                     if "umkfess" in message:
                         message = message.replace("umkfess", "umkfess")
                         if len(message) is not 0:
