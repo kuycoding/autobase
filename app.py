@@ -16,8 +16,8 @@ def start():
                 id = dms[i]['id']
 
                 if len(message) is not 0 and len(message) < 280:
-                    # prikitiw is the keyword
-                    # if you want to turn off the case sensitive like: priktiw, Prikitiw, pRiKiTiw
+                    # umkfess is the keyword
+                    # if you want to turn off the case sensitive like: umkfess, Umkfess, UMKfess
                     # just use lower(message) and check it, but please remove the replace function line
                     if "umkfess" in message:
                         message = message.replace("umkfess", "umkfess")
