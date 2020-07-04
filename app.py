@@ -1,8 +1,8 @@
 from twitter import Twitter
 import time
 
-
 tw = Twitter()
+
 
 def start():
     print("Starting program...")
@@ -19,7 +19,7 @@ def start():
                     # umkfess is the keyword
                     # if you want to turn off the case sensitive like: umkfess, Umkfess, UMKfess
                     # just use lower(message) and check it, but please remove the replace function line
-                    
+
                     if "umkfess" in message:
                         message = message.replace("umkfess", "umkfess")
                         if len(message) is not 0:
@@ -30,7 +30,8 @@ def start():
                             else:
                                 print("DM will be posted with media")
                                 print(dms[i]['shorted_media_url'])
-                                tw.post_tweet_with_media(message, dms[i]['media'],dms[i]['shorted_media_url'], dms[i]['type'])
+                                tw.post_tweet_with_media(message, dms[i]['media'], dms[i]['shorted_media_url'],
+                                                         dms[i]['type'])
                                 tw.delete_dm(id)
                         else:
                             print("DM deleted because its empty..")
@@ -46,6 +47,7 @@ def start():
             dms = tw.read_dm()
             if len(dms) is 0 or dms is None:
                 time.sleep(60)
+
 
 if __name__ == "__main__":
     start()

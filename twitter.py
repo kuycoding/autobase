@@ -20,6 +20,7 @@ class Twitter:
 
     # Read all direct message, REMEMBER! only last month DM will be get
     def read_dm(self):
+        global sender_id
         print("Get direct messages...")
         dms = list()
         try:
@@ -31,11 +32,27 @@ class Twitter:
                 message_data = str(dm[x].message_create['message_data'])
                 json_data = _json.encode_basestring(message_data)
                 print(json_data)
-                print("Getting message -> "+str(message)+" by sender id "+str(sender_id))
+                print("Getting message -> " + str(message) + " by sender id " + str(sender_id))
+
+                keywords = "umkfess" or "Umkfess" or "UMKFess" or "UMKFESS"
+                if keywords in message_data:
+                    api.send_direct_message(sender_id,
+                                            "[Pesan Otomatis]👋\n\nHalo sekarang menfess kamu dalam antrian, "
+                                            "menfess kamu akan diposting dalam 2-5 menit ya")
+
+                elif keywords not in message_data:
+                    print("Keyword wrong")
+                    api.send_direct_message(sender_id,
+                                            "[Pesan Otomatis]👋🏽👋🏽👋🏽\n\nMohon maaf Keyword salah, menfess kamu "
+                                            "tidak akan diposting, baca rules dengan benar, dan gunkan keyword "
+                                            "dengan "
+                                            "benar, gunakan "
+                                            "autobase dengan bijak. \n"
+                                            "https://twitter.com/umkmenfess/status/1278656414747987974")
 
                 if "attachment" not in json_data:
                     print("Dm does not have any media...")
-                    d = dict(message=message, sender_id=sender_id, id=dm[x].id, media = None, shorted_media_url = None)
+                    d = dict(message=message, sender_id=sender_id, id=dm[x].id, media=None, shorted_media_url=None)
                     dms.append(d)
                     dms.reverse()
 
@@ -45,7 +62,9 @@ class Twitter:
                     print(media_type)
                     if media_type == 'photo':
                         attachment = dm[x].message_create['message_data']['attachment']
-                        d = dict(message=message, sender_id=sender_id, id=dm[x].id, media = attachment['media']['media_url'], shorted_media_url = attachment['media']['url'], type = 'photo')
+                        d = dict(message=message, sender_id=sender_id, id=dm[x].id,
+                                 media=attachment['media']['media_url'], shorted_media_url=attachment['media']['url'],
+                                 type='photo')
                         dms.append(d)
                         dms.reverse()
                     elif media_type == 'video':
@@ -58,7 +77,8 @@ class Twitter:
                         media_url = media['video_info']['variants'][0]
                         video_url = media_url['url']
                         print("video url : " + str(video_url))
-                        d = dict(message=message, sender_id=sender_id, id=dm[x].id, media = video_url, shorted_media_url = attachment['media']['url'], type = 'video')
+                        d = dict(message=message, sender_id=sender_id, id=dm[x].id, media=video_url,
+                                 shorted_media_url=attachment['media']['url'], type='video')
                         dms.append(d)
                         dms.reverse()
 
@@ -71,10 +91,9 @@ class Twitter:
             time.sleep(60)
             pass
 
-
     # Delete the message if it doesnt contain a keyword
     def delete_dm(self, id):
-        print("Deleting dm with id = "+ str(id))
+        print("Deleting dm with id = " + str(id))
         try:
             self.api.destroy_direct_message(id)
             time.sleep(40)
@@ -90,7 +109,7 @@ class Twitter:
         except Exception as e:
             print(e)
             pass
-    
+
     # Post a tweet with media, (Photo or Video)
     # If you want to upload some gifs, create a new elif type == 'theTypeOfGifs' 
     def post_tweet_with_media(self, tweet, media_url, shorted_media_url, type):
@@ -98,24 +117,24 @@ class Twitter:
             print("shorted url" + shorted_media_url)
             print("Downloading media...")
             arr = str(media_url).split('/')
-            print(arr[len(arr)-1])
+            print(arr[len(arr) - 1])
             if type == 'video':
-                arr = arr[len(arr)-1].split("?tag=1")
+                arr = arr[len(arr) - 1].split("?tag=1")
                 arr = arr[0]
             elif type == 'photo':
-                arr = arr[len(arr)-1]
+                arr = arr[len(arr) - 1]
 
-            auth = OAuth1(client_key= constants.CONSUMER_KEY,
-                          client_secret= constants.CONSUMER_SCRET,
-                          resource_owner_secret= constants.ACCESS_SECRET,
-                          resource_owner_key= constants.ACCESS_KEY)
-            r = requests.get(media_url, auth = auth)
+            auth = OAuth1(client_key=constants.CONSUMER_KEY,
+                          client_secret=constants.CONSUMER_SCRET,
+                          resource_owner_secret=constants.ACCESS_SECRET,
+                          resource_owner_key=constants.ACCESS_KEY)
+            r = requests.get(media_url, auth=auth)
             with open(arr, 'wb') as f:
                 f.write(r.content)
 
             print("Media downloaded successfully!")
             if shorted_media_url in tweet:
-                print("shorted url "+ str(shorted_media_url))
+                print("shorted url " + str(shorted_media_url))
                 tweet = tweet.replace(shorted_media_url, "")
             else:
                 print("No url in tweet")
@@ -137,5 +156,3 @@ class Twitter:
         except Exception as e:
             print(e)
             pass
-
-
