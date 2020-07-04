@@ -6,7 +6,7 @@ This is a twitter bot that works like others auto base account (tubirfess, askme
 - Please use python version 3.x
 
 # Example
-- Example of how this bot works you can see here https://twitter.com/umkfess <br>
+- Example of how this bot works you can see here https://twitter.com/umkmenfess <br>
 
 # Misc
 Of course this bot still not perfect. You can customize by your own
